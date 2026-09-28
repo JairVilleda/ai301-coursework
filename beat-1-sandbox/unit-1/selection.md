@@ -1,84 +1,86 @@
 # Unit 1 — Issue Selection
 
-Path: `beat-1-sandbox/unit-1/selection.md`
-
-Record of the issue carried into Unit 2, and of the evaluation runs that produced
-`eval-run.txt`. This file is graded at the path above; a copy kept anywhere else in
-the repository is not read.
-
-Complete every labelled field below. Each is graded on its own; content placed under the
-wrong label is not graded.
-
 ---
 
 ## Selected issue
 
 **Issue link**
 
-[The individual Path Review issue page. A link to the repository or the issue list
-does not satisfy this field.]
+https://github.com/codepath/pathreview-ai301-fa26-s1/issues/54 
 
 **Verdict output**
 
-[Your skill's live-mode output for this issue, pasted verbatim and ending with the
-fenced JSON verdict block. A summary does not satisfy this field.]
-
-**The verdict must record `accept` for this issue.** Choose an issue your own skill
-accepts. If your skill rejects every candidate you try, that is a signal about your
-rubric rather than about the issues: revise it and re-run — retries are unlimited and a
-partial re-run costs about $0.20 — or run the skill on different candidates. Output
-recording `reject` for the issue you chose earns no credit for this field.
-
 ```
-paste the output here, including the closing JSON block
+[
+  {
+    "item": "https://github.com/codepath/pathreview-ai301-fa26-s1/issues/54",
+    "checks": [
+      {"name": "Maintainer Activity", "grade": "pass", "evidence": "Most recent default-branch commit Sept 16, 2026 by Aburke225 (co-authored with claude), 11 days before today"},
+      {"name": "Repository Activity", "grade": "pass", "evidence": "Repo not archived; commit on Sept 16, 2026 is within 90 days"},
+      {"name": "Bounded Scope", "grade": "pass", "evidence": "Body names one function (_detect_sections) and one root cause (regex anchors fail on leading whitespace), with three specific failing tests referenced"},
+      {"name": "No Active Contributor", "grade": "pass", "evidence": "No assignee, Development sidebar shows no linked PRs, no comments on the issue"},
+      {"name": "Contribution Policy", "grade": "pass", "evidence": "docs/CONTRIBUTING.md exists and contains no AI-contribution restriction"}
+    ],
+    "verdict": "accept"
+  },
+  {
+    "item": "https://github.com/codepath/pathreview-ai301-fa26-s1/issues/60",
+    "checks": [
+      {"name": "Maintainer Activity", "grade": "pass", "evidence": "Most recent default-branch commit Sept 16, 2026 by Aburke225"},
+      {"name": "Repository Activity", "grade": "pass", "evidence": "Repo not archived; commit within 90 days"},
+      {"name": "Bounded Scope", "grade": "pass", "evidence": "Body isolates one bug in FaithfulnessChecker.check() with a repro snippet and one named failing test"},
+      {"name": "No Active Contributor", "grade": "fail", "evidence": "PR #74 is open, titled to close #60, opened Sept 21, 2026 by another student with a posted fix and test verification"},
+      {"name": "Contribution Policy", "grade": "pass", "evidence": "docs/CONTRIBUTING.md exists and contains no AI-contribution restriction"}
+    ],
+    "verdict": "reject"
+  },
+  {
+    "item": "https://github.com/codepath/pathreview-ai301-fa26-s1/issues/68",
+    "checks": [
+      {"name": "Maintainer Activity", "grade": "pass", "evidence": "Most recent default-branch commit Sept 16, 2026 by Aburke225"},
+      {"name": "Repository Activity", "grade": "pass", "evidence": "Body isolates one bug in KeywordSearcher.index(), names the exact file and an xfail test to un-mark, with a 2-4hr estimate"},
+      {"name": "No Active Contributor", "grade": "fail", "evidence": "PR #78 is open, claims to fix #68, opened Sept 27, 2026 by another student with a completed fix and reported passing checks"},
+      {"name": "Contribution Policy", "grade": "pass", "evidence": "docs/CONTRIBUTING.md exists and contains no AI-contribution restriction"}
+    ],
+    "verdict": "reject"
+  }
+]
 ```
 
 ---
 
 ## Eval iterations
 
-Quote source text directly in each field below. Paraphrase does not satisfy them.
-
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+agreement: 20/20 scored items  (bar: 18/20: PASS)
 
 **Issue analysis**
 
-[One scored issue, identified by id (`issue-01` through `issue-20`; the `calib-`
-issues are not scored). State your rubric's decision, the gold label, and the
-reasoning that produced your rubric's result.]
+issue-01 — rubric decision: accept; gold label: accept. The rubric result matched the gold label because the issue passed all of the required checks, and the verdict rule says an issue is accepted only when all required checks pass.
 
 **Check rationale**
 
-[One check from the `rubric.md` uploaded to `tools/issue-select/`, quoted as it is
-currently written, with the reasoning behind its current form.]
+Bounded Scope | Issue body and comment thread | Pass if the issue describes one specific, actionable task with a reasonably clear expected outcome, and there is no unresolved design/architecture discussion, umbrella/tracking scope, or evidence of repeated abandoned implementation attempts | required
+
+I included this check because a first issue should have one clear task that a new contributor can understand and work on without having to make major design or architecture decisions.
 
 **Trade-offs**
 
-[What the quoted check gives up. Any one of these is a complete answer: an issue whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+This check may reject an issue that a contributor could technically complete but has unresolved design questions or a history of abandoned implementation attempts. I accepted that trade-off because those issues can make a first contribution less predictable and harder to scope.
 
 ---
 
 ## Selection rationale
 
-Graded on whether all three are answered, in your own words. Not on how good the
-reasoning is, and not on length — a short honest answer to each earns the full marks.
-This is also the basis for the claim comment you write in Unit 2.
-
 **Selection rationale**
 
-[Answer all three:
+1. Issue #54 fits my interests because it is a Python issue involving a bug in the resume parser. The issue also looks small enough to work on within the available time because it focuses on one function and a specific regex problem
 
-1. The issue's fit to your interests and to the time available.
-2. What the verdict identified correctly, and what you weighed that the rubric could
-   not.
-3. The anticipated difficulty in claiming it.]
+2. The verdict correctly identified that #54 has a clear scope, no active contributor, an active repository, and no AI contribution restriction. I also considered that the issue matches my Python experience and would give me a manageable first contribution without requiring me to learn a large new part of the project.
+
+3. I do not expect claiming the issue itself to be very difficult because there was no assignee or linked pull request when I evaluated it. The main challenge will likely be understanding the existing resume parser and its tests before making the fix.
+
 
 ---
 
