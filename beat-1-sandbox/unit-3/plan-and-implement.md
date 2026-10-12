@@ -34,33 +34,76 @@ fix/54-resume-section-whitespace
 
 **Evidence**
 
+Two kinds of results are below. The **original Unit 2 results** are copied from my reproduction report (issue comment `issuecomment-6032349322`), run on `main` at `f89c06f` before any fix. The **re-runs** are commands I ran later, during a final check of this submission: each on a clean `git archive` export of one commit, using the project's `.venv` Python. They are not from my original Unit 2 environment. The before re-run is `main` at `f89c06f` and the after re-run is my branch `fix/54-resume-section-whitespace` at `13bc8ce`.
+
 **Before the fix**
 
-I tested the original `main` branch at commit `f89c06f`.
-
-Command:
+Original Unit 2 results (`main`, `f89c06f`):
 
 ```bash
-.venv/bin/pytest tests/unit/test_resume_parser.py -q
+.venv/bin/python -m pytest tests/unit/test_resume_parser.py::TestResumeParser::test_parse_resume_no_work_experience -v
 ```
 
-Result: 5 passed, 5 xfailed.
+```text
+1 xfailed in 0.53s
+```
 
-The indented input produced `[]`, while the unindented input produced `['Education', 'Skills']`.
+The issue's example, with and without indentation, printed `[]` and `['Skills', 'Education']`.
+
+Re-run on the `main` export (`f89c06f`):
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_resume_parser.py::TestResumeParser::test_parse_resume_no_work_experience -v
+```
+
+```text
+tests/unit/test_resume_parser.py::TestResumeParser::test_parse_resume_no_work_experience XFAIL [100%]
+============================== 1 xfailed in 0.15s ==============================
+```
+
+```bash
+.venv/bin/python -m pytest tests/unit/test_resume_parser.py -q
+```
+
+```text
+xx.x..xx..                                                               [100%]
+5 passed, 5 xfailed in 0.18s
+```
+
+```python
+from ingestion.parsers.resume_parser import ResumeParser
+r = ResumeParser()
+res = r.parse('\n    John Smith\n    john@example.com\n\n    Education:\n    - B.S. Computer Science\n\n    Skills: Python\n')
+print(sorted(res.metadata['detected_sections']))
+res = r.parse('\nJohn Smith\njohn@example.com\n\nEducation:\n- B.S. Computer Science\n\nSkills: Python\n')
+print(sorted(res.metadata['detected_sections']))
+```
+
+```text
+[]
+['Education', 'Skills']
+```
 
 **After the fix**
 
-I tested the same test file on `fix/54-resume-section-whitespace`.
+Re-run on the branch export (`fix/54-resume-section-whitespace`, `13bc8ce`), with the same three commands and the same inputs:
 
-Command:
-
-```bash
-.venv/bin/pytest tests/unit/test_resume_parser.py -q
+```text
+tests/unit/test_resume_parser.py::TestResumeParser::test_parse_resume_no_work_experience PASSED [100%]
+============================== 1 passed in 0.08s ==============================
 ```
 
-Result: 11 passed.
+```text
+...........                                                              [100%]
+11 passed in 0.09s
+```
 
-Both indented and unindented input produced `['Education', 'Skills']`.
+```text
+['Education', 'Skills']
+['Education', 'Skills']
+```
+
+The indented text now finds both sections, the unindented text is unchanged, and the five #54 tests pass with their `xfail` markers removed (5 + 5 + my new regression test = 11). The whole-file run and the sorted output are not in my Unit 2 report; they are extra checks I added.
 
 ## Eval iterations
 
@@ -86,4 +129,8 @@ I chose this check because it helps keep plans focused on fixing the reported pr
 
 **Trade-offs**
 
-The fix recognizes headings with leading spaces or tabs, supporting more resume formats. However, an indented line of regular text that looks like a heading could also be detected as one. The change is small and leaves the other section-detection patterns unchanged.
+**What the rubric documents:** `Risks and unknowns` is marked `preferred`, and preferred checks do not affect the final verdict.
+
+**My interpretation:** A plan can overstate an unverified result and still be accepted if it passes the required checks. This is a limitation of the rubric because uncertainty may be flagged without changing the verdict.
+
+**Re-runs:** I did not rerun any package with `--only`, so I am not claiming that any package result changed.
