@@ -1,59 +1,41 @@
 # Unit 4 — Test and Submit
 
-Path: `beat-1-sandbox/unit-4/pull-request.md`
-
-Record of the pull request you opened against the Path Review repo, and of the evaluation
-runs that produced `eval-run.txt`. This file is graded at the path above; a copy kept
-anywhere else in the repository is not read.
-
-Complete every labelled field below. Each is graded on its own; content placed under the wrong
-label is not graded.
-
----
-
 ## Your pull request
 
 **Pull request**
 
-[Link to the pull request you opened. It must be the pull request's own page on the Path
-Review repo, not your fork's branch page.]
+https://github.com/codepath/pathreview-ai301-fa26-s1/pull/147
 
 **Branch**
 
-[The name of the branch the pull request comes from, exactly as it appears in your fork.
-The naming shape is a type prefix, then the issue number, then a short description. **The
-issue number in the branch name must be the number of the issue the pull request fixes** —
-a name carrying any other number does not satisfy this field.]
+`fix/54-resume-section-whitespace`
 
 ## Eval iterations
 
-Answer all four sections. Quote source text directly; paraphrase does not satisfy these
-fields.
-
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+1. Smoke test: 3/3 agreement.
+2. Initial full evaluation: 14/20 agreement.
+3. Targeted diagnostic re-grade: 0/6 agreement.
+4. Targeted regression run: 11/11 agreement.
+5. Full diagnostic evaluation: 19/20 agreement.
+6. Final confirming evaluation: 20/20 agreement.
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+Package `pkg-16` was rejected by my rubric, but its gold label was accept. The failed check was `silent drift`. The plan and description both documented the deferred start-time path, and the diff matched the plan. The grader sometimes interpreted this documented deferral as an unexplained deviation. I kept the `silent drift` check unchanged because the plan and description documented the deferral, the diff matched the plan, and the final evaluation passed 20/20.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/pr-precheck/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+My revised `not tested` check says:
+
+"The plan's repro is demonstrated with observable before/after evidence, and the available test evidence identifies the tests or suites that were run. A named test-suite result or control result may be accepted as supporting evidence without full command output when the package provides a specific, credible statement of the result. Fail if the repro is not exercised, the evidence tests the unchanged path instead of the intended fix, a test-pass claim names no test or suite, or required plan checks are explicitly shown not to have been run. Apply the same standard consistently to all packages."
+
+I revised this check because the original rule required the actual command and output to support a test-pass claim. That was too strict for some packages with specific, credible suite results and observable before-and-after evidence. The revised check accepts that evidence without treating a generic claim that tests pass as sufficient.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+The revised `not tested` check accepts some risk by allowing specific, credible suite-pass statements without full command output. In exchange, it avoids rejecting otherwise well-supported fixes solely because the complete test output is absent. I tested this change with an 11-package targeted regression run covering six previously rejected clear-accept packages, four not-tested rejection cases, and one additional clear-accept package (`pkg-02`). All 11 agreed with their gold labels. The final full evaluation also passed 20/20.
 
 ---
 
